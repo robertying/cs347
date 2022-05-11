@@ -5,9 +5,8 @@ import { ActivityReport } from "../types";
 
 const startTime = new Date();
 
-export const url = window.location.origin;
 // Preserve privacy
-const hashedUrl = SHA256(url).toString();
+export const url = SHA256(window.location.origin).toString();
 
 const activityReport: ActivityReport = {};
 
