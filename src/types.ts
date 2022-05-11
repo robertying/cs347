@@ -11,9 +11,15 @@ export interface ActivityReport {
   };
 }
 
+export interface CustomizationItem {
+  type: "scale";
+  value: number;
+}
+
 export interface Customization {
   [elementSelector: string]: {
     enabled: boolean;
+    items: CustomizationItem[];
   };
 }
 

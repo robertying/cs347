@@ -12,8 +12,9 @@ function sendConfirmation(element: HTMLElement) {
   if (element.parentNode) {
     element.parentNode.insertBefore(root, element);
     root.appendChild(element);
-    root.style.border = "1.5px solid orange";
-    root.style.borderRadius = "10px";
+    root.style.border = "2px solid orange";
+    root.style.borderRadius = "12px";
+    root.style.padding = "2px";
   }
 
   console.log("send confirmation", element);
@@ -30,9 +31,17 @@ function sendConfirmation(element: HTMLElement) {
 
 export async function receiveConfirmation(
   element: HTMLElement,
-  response: boolean
+  customization:
+    | {
+        enabled: true;
+        type: "scale";
+        value: number;
+      }
+    | {
+        enabled: false;
+      }
 ) {
-  const root = document.getElementById("chewbacca-confirmation-root");
+  const root = document.getElementById("grogu-confirmation-root");
   if (root) {
     root.style.border = "";
   }
@@ -44,10 +53,20 @@ export async function receiveConfirmation(
     return;
   }
 
-  websiteData.customization[elementSelector] = { enabled: response };
+  websiteData.customization[elementSelector] = {
+    enabled: customization.enabled,
+    items: customization.enabled
+      ? [
+          {
+            type: customization.type,
+            value: customization.value,
+          },
+        ]
+      : [],
+  };
   await setWebsiteData(url, websiteData);
 
-  if (response) {
+  if (customization.enabled) {
     applyCustomization(elementSelector);
   }
 }
@@ -61,13 +80,22 @@ export async function getElementCustomization(elementSelector: string) {
   return websiteData.customization[elementSelector];
 }
 
-function applyCustomization(elementSelector: string) {
+async function applyCustomization(elementSelector: string) {
   const element = document.querySelector(elementSelector) as HTMLElement | null;
   if (!element) {
     return;
   }
 
-  element.style.transform = "scale(1.5)";
+  const customization = await getElementCustomization(elementSelector);
+  if (!customization || !customization.enabled) {
+    return;
+  }
+
+  for (const item of customization.items) {
+    if (item.type === "scale") {
+      element.style.transform = `scale(${item.value})`;
+    }
+  }
 }
 
 export async function applyCustomizationsToAll() {
@@ -109,6 +137,7 @@ export async function checkFrequency() {
 
     const elementCustomization = websiteData.customization[elementSelector];
     if (!elementCustomization) {
+      console.log(elementSelector);
       sendConfirmation(element);
     }
   }

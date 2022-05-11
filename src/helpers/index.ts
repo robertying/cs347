@@ -2,7 +2,9 @@ import { getCssSelector } from "css-selector-generator";
 import { ActivityReport, WebsiteData } from "../types";
 
 export function getSelector(element: unknown) {
-  return getCssSelector(element, { blacklist: ["[href=*"] });
+  return getCssSelector(element, {
+    blacklist: ["#grogu-*", "[style=*", "[href=*"],
+  });
 }
 
 export async function getWebsiteData(url: string) {
@@ -28,14 +30,7 @@ export async function clearAllData() {
 
 export async function exportData() {
   const data = await chrome.storage.local.get(null);
-  navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(
-    function () {
-      /* clipboard successfully set */
-    },
-    function () {
-      /* clipboard write failed */
-    }
-  );
+  await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
 }
 
 export async function addWebsiteActivity(
