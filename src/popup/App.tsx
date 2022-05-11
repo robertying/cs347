@@ -8,6 +8,7 @@ import {
   Button,
   createTheme,
   CssBaseline,
+  Divider,
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
@@ -46,7 +47,7 @@ function App() {
       <CssBaseline />
       <Box
         sx={{
-          width: 200,
+          width: 250,
           height: 300,
           p: 2,
           display: "flex",
@@ -54,9 +55,22 @@ function App() {
           alignItems: "center",
         }}
       >
-        <Button onClick={handleExportData}>Export Data</Button>
-        <Button onClick={handleClearWebsiteData}>Clear Website Data</Button>
-        <Button onClick={handleClearAllData}>Clear All Data</Button>
+        <Box
+          sx={{ my: 1, width: 128, height: 128 }}
+          component="img"
+          src="/logo-128.png"
+          alt="Grogu"
+        />
+        <Button sx={{ mt: "auto" }} onClick={handleExportData}>
+          Export Data To Clipboard
+        </Button>
+        <Divider sx={{ my: 1 }} flexItem variant="middle" />
+        <Button color="error" onClick={handleClearWebsiteData}>
+          Clear Website Data
+        </Button>
+        <Button color="error" onClick={handleClearAllData}>
+          Clear All Data
+        </Button>
       </Box>
     </ThemeProvider>
   );
