@@ -7,7 +7,7 @@ import { getSelector, getWebsiteData, setWebsiteData } from "../helpers";
 
 function sendConfirmation(element: HTMLElement) {
   const root = document.createElement("div");
-  root.id = "chewbacca-confirmation-root";
+  root.id = "grogu-confirmation-root";
 
   if (element.parentNode) {
     element.parentNode.insertBefore(root, element);
@@ -19,7 +19,7 @@ function sendConfirmation(element: HTMLElement) {
   console.log("send confirmation", element);
 
   const popover = document.createElement("div");
-  popover.id = "chewbacca-confirmation-popover";
+  popover.id = "grogu-confirmation-popover";
 
   ReactDOM.createRoot(popover).render(
     <React.StrictMode>
