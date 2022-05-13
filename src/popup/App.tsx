@@ -12,6 +12,7 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
+import { SHA256 } from "crypto-js";
 import { clearAllData, clearWebsiteData, exportData } from "../helpers";
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
     const tabs = await chrome.tabs.query({
       active: true,
     });
-    clearWebsiteData(new URL(tabs[0].url!).origin);
+    const url = new URL(tabs[0].url!);
+    clearWebsiteData(SHA256(url.origin).toString());
   };
 
   const handleClearAllData = () => {

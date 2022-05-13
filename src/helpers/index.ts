@@ -3,7 +3,7 @@ import { ActivityReport, WebsiteData } from "../types";
 
 export function getSelector(element: unknown) {
   return getCssSelector(element, {
-    blacklist: ["#grogu-*", "[style=*", "[href=*"],
+    blacklist: ["#grogu-*", "[style*", "[href*", ".Mui*", /^.*active.*$/],
   });
 }
 

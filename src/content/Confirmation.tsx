@@ -1,67 +1,138 @@
 import { useState } from "react";
-import { Box, Button, Popover, Slider, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Slider, Stack, Typography } from "@mui/material";
+import { usePopper } from "react-popper";
+import { ChromePicker } from "react-color";
 import { receiveConfirmation } from "./process";
 
-const Confirmation: React.FC<{ anchor: HTMLElement }> = ({ anchor }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(anchor);
+const Confirmation: React.FC<{
+  anchor: HTMLElement;
+  anchorStyle: {
+    border: string;
+    borderRadius: string;
+  };
+}> = ({ anchor, anchorStyle }) => {
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
+    anchor
+  );
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const { styles, attributes, update } = usePopper(
+    referenceElement,
+    popperElement,
+    {
+      modifiers: [
+        {
+          name: "preventOverflow",
+          options: {
+            padding: 8,
+          },
+        },
+        {
+          name: "flip",
+          options: {
+            fallbackPlacements: ["top"],
+          },
+        },
+      ],
+    }
+  );
+
   const [customizationEnabled, setCustomizationEnabled] = useState(false);
   const [scale, setScale] = useState(150);
+  const [fontSize, setFontSize] = useState(100);
+  const initialColor = window.getComputedStyle(anchor).color;
+  const [color, setColor] = useState(initialColor);
 
   const handleEnableCustomization = () => {
-    receiveConfirmation(anchorEl!, {
+    receiveConfirmation(anchor, anchorStyle, {
       enabled: true,
-      type: "scale",
-      value: scale / 100,
+      items: [
+        {
+          type: "scale",
+          value: scale / 100,
+        },
+        {
+          type: "fontSize",
+          value: fontSize / 100,
+        },
+        {
+          type: "color",
+          value: color,
+        },
+      ],
     });
-    setAnchorEl(null);
+    setReferenceElement(null);
   };
 
   const handleYes = () => {
     setCustomizationEnabled(true);
+    update?.();
   };
 
   const handleNo = () => {
-    receiveConfirmation(anchorEl!, {
+    receiveConfirmation(anchor, anchorStyle, {
       enabled: false,
     });
-    setAnchorEl(null);
+    setReferenceElement(null);
   };
 
+  if (!referenceElement) {
+    return null;
+  }
+
   return (
-    <Popover
-      id="grogu-popover"
+    <Card
+      id="grogu-confirmation-popover"
       sx={{
-        ".MuiPaper-root": {
-          mt: 1.5,
-        },
+        mt: 1,
+        zIndex: 99999,
       }}
-      open={anchorEl ? true : false}
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "center",
-      }}
+      elevation={4}
+      ref={setPopperElement}
+      style={styles.popper}
+      {...attributes.popper}
     >
       {customizationEnabled ? (
         <Box sx={{ p: 2, width: 300 }}>
           <Typography>How much bigger do you want?</Typography>
-          <Stack spacing={1} direction="row" sx={{ my: 2 }} alignItems="center">
+          <Typography sx={{ mt: 2 }}>Element Size</Typography>
+          <Stack spacing={2} direction="row" alignItems="center">
             <Typography>100%</Typography>
             <Slider
-              defaultValue={150}
               min={100}
-              max={300}
+              max={200}
               valueLabelDisplay="auto"
               value={scale}
               onChange={(e, value) => setScale(value as number)}
             />
-            <Typography>300%</Typography>
+            <Typography>200%</Typography>
           </Stack>
-          <Button fullWidth onClick={handleEnableCustomization}>
+          <Typography sx={{ mt: 2 }}>Font Size</Typography>
+          <Stack spacing={2} direction="row" alignItems="center">
+            <Typography>100%</Typography>
+            <Slider
+              min={100}
+              max={200}
+              valueLabelDisplay="auto"
+              value={fontSize}
+              onChange={(e, value) => setFontSize(value as number)}
+            />
+            <Typography>200%</Typography>
+          </Stack>
+          <Typography sx={{ mt: 2 }}>Text Color</Typography>
+          <Button sx={{ my: 0.5 }} onClick={() => setColor(initialColor)}>
+            Reset
+          </Button>
+          <Box
+            sx={{
+              "& .chrome-picker": {
+                mx: "auto",
+                boxShadow: "none !important",
+              },
+            }}
+          >
+            <ChromePicker color={color} onChange={(c) => setColor(c.hex)} />
+          </Box>
+          <Button sx={{ mt: 2 }} fullWidth onClick={handleEnableCustomization}>
             Ok
           </Button>
         </Box>
@@ -85,7 +156,7 @@ const Confirmation: React.FC<{ anchor: HTMLElement }> = ({ anchor }) => {
           </Box>
         </Box>
       )}
-    </Popover>
+    </Card>
   );
 };
 

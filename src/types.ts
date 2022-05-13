@@ -11,10 +11,23 @@ export interface ActivityReport {
   };
 }
 
-export interface CustomizationItem {
-  type: "scale";
-  value: number;
-}
+export type CustomizationItem =
+  | {
+      type: "scale";
+      value: number;
+    }
+  | {
+      type: "fontSize";
+      value: number;
+    }
+  | {
+      type: "color";
+      value: string;
+    }
+  | {
+      type: "backgroundColor";
+      value: string;
+    };
 
 export interface Customization {
   [elementSelector: string]: {

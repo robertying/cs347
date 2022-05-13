@@ -4,47 +4,46 @@ import { url } from "./index";
 import App from "./App";
 import Thresholds from "../constants/thresholds";
 import { getSelector, getWebsiteData, setWebsiteData } from "../helpers";
+import { CustomizationItem } from "../types";
 
 function sendConfirmation(element: HTMLElement) {
-  const root = document.createElement("div");
-  root.id = "grogu-confirmation-root";
-
-  if (element.parentNode) {
-    element.parentNode.insertBefore(root, element);
-    root.appendChild(element);
-    root.style.border = "2px solid orange";
-    root.style.borderRadius = "12px";
-    root.style.padding = "2px";
-  }
+  const previousStyle = {
+    border: element.style.border,
+    borderRadius: element.style.borderRadius,
+  };
+  element.style.border = "2px solid orange";
+  element.style.borderRadius = "8px";
 
   console.log("send confirmation", element);
 
   const popover = document.createElement("div");
-  popover.id = "grogu-confirmation-popover";
+  popover.id = "grogu-confirmation-root";
+  element.parentNode?.insertBefore(popover, element.nextSibling);
 
   ReactDOM.createRoot(popover).render(
     <React.StrictMode>
-      <App anchor={element} />
+      <App anchor={element} anchorStyle={previousStyle} />
     </React.StrictMode>
   );
 }
 
 export async function receiveConfirmation(
   element: HTMLElement,
+  previousStyle: {
+    border: string;
+    borderRadius: string;
+  },
   customization:
     | {
         enabled: true;
-        type: "scale";
-        value: number;
+        items: CustomizationItem[];
       }
     | {
         enabled: false;
       }
 ) {
-  const root = document.getElementById("grogu-confirmation-root");
-  if (root) {
-    root.style.border = "";
-  }
+  element.style.border = previousStyle.border;
+  element.style.borderRadius = previousStyle.borderRadius;
 
   const elementSelector = getSelector(element);
 
@@ -55,14 +54,7 @@ export async function receiveConfirmation(
 
   websiteData.customization[elementSelector] = {
     enabled: customization.enabled,
-    items: customization.enabled
-      ? [
-          {
-            type: customization.type,
-            value: customization.value,
-          },
-        ]
-      : [],
+    items: customization.enabled ? customization.items : [],
   };
   await setWebsiteData(url, websiteData);
 
@@ -92,8 +84,18 @@ async function applyCustomization(elementSelector: string) {
   }
 
   for (const item of customization.items) {
-    if (item.type === "scale") {
-      element.style.transform = `scale(${item.value})`;
+    switch (item.type) {
+      case "scale":
+        element.style.transform = `scale(${item.value})`;
+        break;
+      case "fontSize":
+        element.style.fontSize = `calc(${
+          window.getComputedStyle(element).fontSize
+        } * ${item.value})`;
+        break;
+      case "color":
+        element.style.color = item.value;
+        break;
     }
   }
 }
@@ -139,6 +141,7 @@ export async function checkFrequency() {
     if (!elementCustomization) {
       console.log(elementSelector);
       sendConfirmation(element);
+      break;
     }
   }
 }
