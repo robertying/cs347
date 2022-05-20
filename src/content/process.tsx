@@ -61,10 +61,6 @@ export async function receiveConfirmation(
     items: customization.enabled ? customization.items : [],
   };
   await setWebsiteData(url, websiteData);
-
-  if (customization.enabled) {
-    applyCustomization(elementSelector);
-  }
 }
 
 export async function getElementCustomization(elementSelector: string) {
