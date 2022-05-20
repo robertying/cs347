@@ -1,5 +1,6 @@
 import { getCssSelector } from "./css_path";
 import { ActivityReport, WebsiteData } from "../types";
+import { Thresholds } from "../constants";
 
 export function getSelector(element: unknown) {
   return getCssSelector(element);
@@ -45,6 +46,7 @@ export async function addWebsiteActivity(
   const websiteData = (await getWebsiteData(url)) ?? {
     activity: {},
     customization: {},
+    frequencyThreshold: Thresholds.clickFrequency,
   };
 
   for (const [elementSelector, { clickCount }] of Object.entries(

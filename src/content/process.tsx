@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { url } from "./index";
 import App from "./App";
-import Thresholds from "../constants/thresholds";
+import { FrequencyThresholdStepRatio, Thresholds } from "../constants";
 import { getSelector, getWebsiteData, setWebsiteData } from "../helpers";
 import { CustomizationItem } from "../types";
 
@@ -48,6 +48,12 @@ export async function receiveConfirmation(
   const websiteData = await getWebsiteData(url);
   if (!websiteData) {
     return;
+  }
+
+  if (customization.enabled) {
+    websiteData.frequencyThreshold *= 1 - FrequencyThresholdStepRatio;
+  } else {
+    websiteData.frequencyThreshold *= 1 + FrequencyThresholdStepRatio;
   }
 
   websiteData.customization[elementSelector] = {
@@ -127,7 +133,7 @@ export async function checkFrequency() {
   )) {
     if (
       clickTotal < Thresholds.clickCount ||
-      maxFrequency < Thresholds.clickFrequency
+      maxFrequency < websiteData.frequencyThreshold
     ) {
       continue;
     }

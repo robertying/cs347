@@ -39,4 +39,5 @@ export interface Customization {
 export interface WebsiteData {
   activity: Activity;
   customization: Customization;
+  frequencyThreshold: number;
 }
