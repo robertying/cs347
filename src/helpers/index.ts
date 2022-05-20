@@ -20,6 +20,7 @@ export async function setWebsiteData(url: string, websiteData: WebsiteData) {
 export async function resetWebsiteCustomization(url: string) {
   const { data } = await chrome.storage.local.get({ data: {} });
   (data[url] as WebsiteData).customization = {};
+  (data[url] as WebsiteData).frequencyThreshold = Thresholds.clickFrequency;
   await chrome.storage.local.set({ data });
 }
 
