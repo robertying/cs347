@@ -1,6 +1,6 @@
 const Thresholds = {
-  clickCount: 5,
-  clickFrequency: 5 / (10 * 60 * 1000),
+  clickCount: 2 * 3,
+  clickFrequency: 200 / (60 * 60 * 1000),
 };
 
 export default Thresholds;
