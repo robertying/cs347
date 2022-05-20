@@ -94,6 +94,9 @@ async function applyCustomization(elementSelector: string) {
       case "color":
         element.style.setProperty("color", item.value, "important");
         break;
+      case "backgroundColor":
+        element.style.setProperty("background-color", item.value, "important");
+        break;
     }
   }
 }
