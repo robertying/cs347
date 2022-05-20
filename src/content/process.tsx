@@ -92,7 +92,7 @@ async function applyCustomization(elementSelector: string) {
         } * ${item.value})`;
         break;
       case "color":
-        element.style.color = item.value;
+        element.style.setProperty("color", item.value, "important");
         break;
     }
   }
@@ -137,6 +137,8 @@ export async function checkFrequency() {
 
     const elementCustomization = websiteData.customization[elementSelector];
     if (!elementCustomization) {
+      console.log("send confirmation to");
+      console.log(element);
       console.log(elementSelector);
       sendConfirmation(element);
       break;
