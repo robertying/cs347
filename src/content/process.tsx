@@ -14,8 +14,6 @@ function sendConfirmation(element: HTMLElement) {
   element.style.border = "2px solid orange";
   element.style.borderRadius = "8px";
 
-  console.log("send confirmation", element);
-
   const popover = document.createElement("div");
   popover.id = "grogu-confirmation-root";
   element.parentNode?.insertBefore(popover, element.nextSibling);

@@ -1,10 +1,8 @@
-import { getCssSelector } from "css-selector-generator";
+import { getCssSelector } from "./css_path";
 import { ActivityReport, WebsiteData } from "../types";
 
 export function getSelector(element: unknown) {
-  return getCssSelector(element, {
-    blacklist: ["#grogu-*", "[style*", "[href*", ".Mui*", /^.*active.*$/],
-  });
+  return getCssSelector(element);
 }
 
 export async function getWebsiteData(url: string) {

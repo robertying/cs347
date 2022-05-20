@@ -10,9 +10,20 @@ export const url = SHA256(window.location.origin).toString();
 
 let activityReport: ActivityReport = {};
 
-document.addEventListener(
+document.body.addEventListener(
   "click",
   (e) => {
+    if (!e.target) {
+      return;
+    }
+    const element = e.target as HTMLElement;
+    if (element.tagName === "BODY") {
+      return;
+    }
+    if (element.closest("#grogu-confirmation-root")) {
+      return;
+    }
+
     const elementSelector = getSelector(e.target);
     if (!activityReport[elementSelector]) {
       activityReport[elementSelector] = {
@@ -21,7 +32,7 @@ document.addEventListener(
     } else {
       activityReport[elementSelector].clickCount++;
     }
-    console.log(activityReport);
+    console.log("activity", activityReport);
   },
   true
 );
