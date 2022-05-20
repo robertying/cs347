@@ -16,6 +16,12 @@ export async function setWebsiteData(url: string, websiteData: WebsiteData) {
   await chrome.storage.local.set({ data });
 }
 
+export async function resetWebsiteCustomization(url: string) {
+  const { data } = await chrome.storage.local.get({ data: {} });
+  (data[url] as WebsiteData).customization = {};
+  await chrome.storage.local.set({ data });
+}
+
 export async function clearWebsiteData(url: string) {
   const { data } = await chrome.storage.local.get({ data: {} });
   delete data[url];
