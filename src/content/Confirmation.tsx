@@ -146,7 +146,7 @@ const Confirmation: React.FC<{
     >
       {customizationEnabled ? (
         <Box sx={{ p: 2, width: 300 }}>
-          <Typography>How much bigger do you want?</Typography>
+          <Typography>How would you like this element to look?</Typography>
           <Typography sx={{ mt: 2 }}>Element Size</Typography>
           <Stack spacing={2} direction="row" alignItems="center">
             <Typography>100%</Typography>
@@ -193,8 +193,8 @@ const Confirmation: React.FC<{
                 borderWidth: "0.25rem",
                 borderColor:
                   colorMode === "color"
-                    ? theme.palette.primary.main
-                    : theme.palette.primary.light,
+                    ? theme.palette.primary.light
+                    : theme.palette.action.disabledBackground,
                 width: "1rem",
                 height: "1rem",
               }}
@@ -225,8 +225,8 @@ const Confirmation: React.FC<{
                 borderWidth: "0.25rem",
                 borderColor:
                   colorMode === "backgroundColor"
-                    ? theme.palette.primary.main
-                    : theme.palette.primary.light,
+                    ? theme.palette.primary.light
+                    : theme.palette.action.disabledBackground,
                 width: "1rem",
                 height: "1rem",
               }}
@@ -278,8 +278,8 @@ const Confirmation: React.FC<{
       ) : (
         <Box sx={{ p: 2, width: 200 }}>
           <Typography>
-            You seem to click this element a lot. Would you like it to be
-            bigger? 😀
+            You seem to click this element a lot. Would you like it to be bigger
+            and more noticeable? 😀
           </Typography>
           <Box
             sx={{
