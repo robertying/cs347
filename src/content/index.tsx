@@ -48,13 +48,13 @@ function sendActivity() {
   }
 }
 
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    sendActivity();
-    activityReport = {};
-  } else {
-    startTime = new Date();
-  }
+window.addEventListener("focus", () => {
+  startTime = new Date();
+});
+
+window.addEventListener("blur", () => {
+  sendActivity();
+  activityReport = {};
 });
 
 window.addEventListener("load", () => {
