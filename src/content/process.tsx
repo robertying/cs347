@@ -16,7 +16,7 @@ function sendConfirmation(element: HTMLElement) {
 
   const popover = document.createElement("div");
   popover.id = "grogu-confirmation-root";
-  element.parentNode?.insertBefore(popover, element.nextSibling);
+  document.body.appendChild(popover);
 
   ReactDOM.createRoot(popover).render(
     <React.StrictMode>
