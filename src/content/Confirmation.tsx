@@ -146,7 +146,9 @@ const Confirmation: React.FC<{
     >
       {customizationEnabled ? (
         <Box sx={{ p: 2, width: 300 }}>
-          <Typography>How would you like this element to look?</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>
+            How would you like this element to look?
+          </Typography>
           <Typography sx={{ mt: 2 }}>Element Size</Typography>
           <Stack spacing={2} direction="row" alignItems="center">
             <Typography>100%</Typography>
